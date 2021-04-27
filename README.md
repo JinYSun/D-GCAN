@@ -13,6 +13,10 @@ conda install pytorch
 
 conda install -c conda-forge rdkit
 
+Discussion
+
+The Discussion folder contains the scripts for evaluating the classification performance.  We compared RF,MLP, CNN,GNN,SVC.
+
 Usage
 
 If you want to make the prediction of druglikeness of unknown molecule, please put the molecule's SMILES files in to data directory and run preprocess.py and D-gat.py

@@ -15,7 +15,7 @@ conda install -c conda-forge rdkit
 
 Discussion
 
-The Discussion folder contains the scripts for evaluating the classification performance.  We compared RF,MLP, CNN,GNN,SVC.
+The Discussion folder contains the scripts for evaluating the classification performance.  We compared RF,GPC, CNN,GNN,SVC.
 
 Usage
 

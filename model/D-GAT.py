@@ -19,47 +19,29 @@ class GraphAttentionLayer(nn.Module):
         super(GraphAttentionLayer, self).__init__()
         self.dropout = dropout
         self.concat = concat
-        self.in_features = in_features  # 输入特征数
-        self.out_features = out_features  # 输出特征数
-        self.alpha = alpha  # 激活斜率 (LeakyReLU)的激活斜率
-        self.W = nn.Parameter(torch.zeros(size=(in_features, out_features)))  # 建立一个w权重，用于对特征数F进行线性变化
-        torch.nn.init.xavier_uniform_(self.W , gain=2.0)   # 对权重矩阵进行初始化
+        self.in_features = in_features  
+        self.out_features = out_features 
+        self.alpha = alpha  
+        self.W = nn.Parameter(torch.zeros(size=(in_features, out_features)))  
+        torch.nn.init.xavier_uniform_(self.W , gain=2.0)  
         #torch.nn.init.kaiming_uniform_(self.W, a=0, mode='fan_in', nonlinearity='leaky_relu')
-        self.a = nn.Parameter(torch.zeros(size=(2 * out_features, 1)))  # 计算函数α，输入是上一层两个输出的拼接，输出的是eij，a的size为(2*F',1)
-        #torch.nn.init.kaiming_uniform_(self.a, a=0, mode='fan_in', nonlinearity='leaky_relu')  # 对a进行初始化
+        self.a = nn.Parameter(torch.zeros(size=(2 * out_features, 1)))  
+        #torch.nn.init.kaiming_uniform_(self.a, a=0, mode='fan_in', nonlinearity='leaky_relu')  
         torch.nn.init.xavier_uniform_(self.W , gain=1.9)
         self.leakyrelu = nn.LeakyReLU(self.alpha)
 
-    def forward(self, input, adj):
-        
-        h = torch.mm(input, self.W)
-        # 获取当前的节点数量
-        N = h.size()[0]
-        # 下面是self-attention input ，构建自我的特征矩阵
-        # 参数的计算过程如下：
-        # h.repeat(1,N)将h的每一行按列扩展N次，扩展后的size为(N,F'*N)
-        # .view(N*N,-1)对扩展后的矩阵进行重新排列，size为(N*N,F')每N行表示的都是同一个节点的N次重复的特征表示。
-        # h.repeat(N,1)对当前的所有行重复N次，每N行表示N个节点的特征表示
-        # torch.cat对view之后和repeat(N,1)的特征进行拼接，每N行表示一个节点的N次特征重复，分别和其他节点做拼接。size为(N*N,2*F')
-        # .view(N,-1,2*self.out_features)表示将矩阵整理为(N,N,2*F')的形式。第一维度的每一个表示一个节点，第二个维度表示上一个节点对应的其他的所有节点，第三个节点表示特征拼接
-        a_input = torch.cat([h.repeat(1, N).view(N * N, -1), h.repeat(N, 1)], dim=1).view(N, -1, 2 * self.out_features)
-        # 每一行是一个词与其他各个词的相关性值
-        # matmul(a_input,self.a) 的size为(N,N,1)表示eij对应的数值，最后对第二个维度进行压缩
-        # e的size为(N,N)，每一行表示一个节点，其他各个节点对该行的贡献度
+    def forward(self, input, adj):   
+        h = torch.mm(input, self.W)   
+        N = h.size()[0]     
+        a_input = torch.cat([h.repeat(1, N).view(N * N, -1), h.repeat(N, 1)], dim=1).view(N, -1, 2 * self.out_features)    
         e = self.leakyrelu(torch.matmul(a_input, self.a).squeeze(2))
-
-        # 生成一个矩阵，size为(N,N)
-        zero_vec =-9e10 *torch.ones_like(e)# 
-        # 对于邻接矩阵中的元素，>0说明两种之间有变连接，就用e中的权值，否则表示没有变连接，就用一个默认值来表示
-        attention = torch.where(adj > 0, e, zero_vec)
-        # 做一个softmax，生成贡献度权重
+        zero_vec =-9e10 *torch.ones_like(e)
+        attention = torch.where(adj > 0, e, zero_vec)      
         attention = F.softmax(attention, dim=1)
-        # dropout操作
         attention = F.dropout(attention, self.dropout, training=self.training)
-        # 根据权重计算最终的特征输出。
         h_prime = torch.matmul(attention, h)
         if self.concat:
-            return F.elu(h_prime)  # 做一次激活
+            return F.elu(h_prime)  
         else:
             return h_prime
 
@@ -68,34 +50,24 @@ class GAT(nn.Module):
     def __init__(self, nfeat, nhid, dropout, alpha, nheads):
         super(GAT, self).__init__()
         self.dropout = dropout
-        # 根据多头部分给定的数量声明attention的数量
         self.attentions = [GraphAttentionLayer(nfeat, nhid, dropout=dropout, alpha=alpha, concat=True) for _ in
                            range(nheads)]
-        # 将多头的各个attention作为子模块添加到当前模块中。
         for i, attention in enumerate(self.attentions):
             self.add_module('attention_{}'.format(i), attention)
 
         self.out_att = GraphAttentionLayer(nhid,56, dropout=dropout, alpha=alpha, concat=False)
         self.nheads=nheads
-    # 前向传播过程
+
     def forward(self, x, adj):
-        # 参数x：各个输入的节点得特征表示
-        # 参数adj：邻接矩阵表示
-        
-        # 对每一个attention的输出做拼接
         x = F.dropout(x, self.dropout, training=self.training)
         #x = torch.cat([att(x, adj) for att in self.attentions], dim=1)
         
         z=torch.zeros_like(self.attentions[1](x, adj))
         for att in self.attentions:
             z=torch.add(z, att(x, adj))
-            
         x = z/self.nheads 
         x = F.dropout(x, self.dropout, training=self.training)
-       # print(x.size())
         x = F.elu(self.out_att(x, adj))
-
-        # 各个分类的概率归一化
         return F.softmax(x, dim=1)
 
 class MolecularGraphNeuralNetwork(nn.Module):
@@ -113,12 +85,6 @@ class MolecularGraphNeuralNetwork(nn.Module):
         self.attentions = GAT(dim, dim, dropout, alpha=self.alpha, nheads=self.nheads).to(device)
 
     def pad(self, matrices, pad_value):
-        """Pad the list of matrices
-        with a pad_value (e.g., 0) for batch processing.
-        For example, given a list of matrices [A, B, C],
-        we obtain a new matrix [A00, 0B0, 00C],
-        where 0 is the zero (i.e., pad value) matrix.
-        """
         shapes = [m.shape for m in matrices]
         M, N = sum([s[0] for s in shapes]), sum([s[1] for s in shapes])
         zeros = torch.FloatTensor(np.zeros((M, N))).to(device)
@@ -141,29 +107,20 @@ class MolecularGraphNeuralNetwork(nn.Module):
         return torch.stack(sum_vectors)
 
     def gnn(self, inputs):
-
         Smiles, fingerprints, adjacencies, molecular_sizes = inputs
         fingerprints = torch.cat(fingerprints)
         adj = self.pad(adjacencies, 0)
-
-        """GNN layer (update the fingerprint vectors)."""
         fingerprint_vectors = self.embed_fingerprint(fingerprints)
 
         for l in range(layer_hidden):
             hs = self.update(adj, fingerprint_vectors, l)
             fingerprint_vectors = F.normalize(hs, 2, 1)
-        
-        # molecular_vectors = self.sum(fingerprint_vectors, molecular_sizes)
-        """Molecular vector by sum or mean of the fingerprint vectors."""
-
         molecular_vectors = self.attentions(fingerprint_vectors, adj)
-       # print(molecular_vectors.size())
         molecular_vectors = self.sum(molecular_vectors, molecular_sizes)
-        #print(molecular_vectors.size())
         return Smiles, molecular_vectors
 
     def mlp(self, vectors):
-        """Classifier  based on multilayer perceptron给予多层感知器的分类器."""
+
         for l in range(layer_output):
         
             vectors = torch.relu(self.W_output[l](vectors))
@@ -318,7 +275,7 @@ if __name__ == "__main__":
     batch_test = 8
     lr =3e-4
     lr_decay = 0.85
-    decay_interval = 25  # 下降间隔
+    decay_interval = 25 
     iteration = 140
     N = 5000
     (radius, dim, layer_hidden, layer_output,
@@ -336,12 +293,10 @@ if __name__ == "__main__":
         device = torch.device('cpu')
         print('The code uses a CPU...')
     print('-' * 100)
-
-    #    print('Preprocessing the', dataset, 'dataset.')
     print('Just a moment......')
     print('-' * 100)
-    path = 'E:/code/drug/'
-    dataname = 'drugnn/'
+    path = ''
+    dataname = ''
     
     dataset_train=   pp.create_dataset('data_train.txt',path,dataname)
     dataset_test= pp.create_dataset('data_test.txt',path,dataname)
@@ -385,11 +340,8 @@ if __name__ == "__main__":
         epoch += 1
         if epoch % decay_interval == 0:
             trainer.optimizer.param_groups[0]['lr'] *= lr_decay
-            #trainer.optimizer.param_groups[0]['amsgrad'] = True
         # [‘amsgrad’, ‘params’, ‘lr’, ‘betas’, ‘weight_decay’, ‘eps’]
         prediction_train, loss_train, train_res = trainer.train(dataset_train)
-
-        
         prediction_test, loss_test, test_res = tester.test_classifier(dataset_test)
 
         time = timeit.default_timer() - start
@@ -407,23 +359,17 @@ if __name__ == "__main__":
         tester.save_result(result, file_result)
         tester.save_model(model, file_model)
         print(result)
-    models=torch.load('E:/code/drug/model.h5')
-#    models.load_weights()
     dataset_dev=pp.create_dataset('world.txt', path, dataname)
     np.random.seed(0)
     np.random.shuffle(dataset_dev)
     model.eval()
     
-    #dataset_nondrug = pp.create_dataset('non-drug.txt', path, dataname)
-   # dataset_dev = edit_dataset(dataset_extra,dataset_nondrug, 'unbalance')
+   
     prediction_dev, loss_dev, dev_res =  tester.test_classifier(dataset_dev)
     loss = pd.read_table(file_result)
-    #plt.plot(loss['Loss_train'], color='r', label='Loss of train set')
-   # plt.plot(loss['Loss_test'], color='y', label='Loss of test set')
-  # plt.plot(loss['Loss_dev'], color='b', label='Loss of dev set')
+
     plt.plot(loss['AUC_train'], color='r', label='AUC of train set')
     plt.plot(loss['AUC_test'], color='b', label='AUC of test set')
-   # plt.plot(loss['AUC_dev'], color='b',label='AUC of dev set')
     plt.ylabel('AUC')
     plt.xlabel('Epoch')
     plt.xlim(-1,145)
@@ -441,7 +387,6 @@ if __name__ == "__main__":
         plt.scatter((res_test[res_test[:, 0] == i, 0]), (res_test[res_test[:, 0] == i, 2]), color=color, alpha=.8,
                     lw=lw, label=target_name)
     plt.legend(loc='best', shadow=False, scatterpoints=1)
-   # plt.title('The results of D-GAT classification')
     res_train = train_res.T
     cn_matrix = confusion_matrix(res_train[:, 0], res_train[:, 1])
     cn_matrix

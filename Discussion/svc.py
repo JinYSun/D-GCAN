@@ -106,34 +106,12 @@ def one_hot_coding(smi, words, kekuleSmiles=True, max_len=1000):
     data = np.repeat(1, len(coord_j))
     output = sparse.csr_matrix((data, (coord_j, coord_k)), shape=(max_len, len(words)))
     return output
-def split_dataset(dataset, ratio):
-    """Shuffle and split a dataset."""
-   # np.random.seed(111)  # fix the seed for shuffle.
-    #np.random.shuffle(dataset)
-    n = int(ratio * len(dataset))
-    return dataset[:n], dataset[n:]
-def edit_dataset(drug,non_drug,task):
-  #  np.random.seed(111)  # fix the seed for shuffle.
 
-#    np.random.shuffle(non_drug)
-    non_drug=non_drug[0:len(drug)]
-       
-
-      #  np.random.shuffle(non_drug)
-   # np.random.shuffle(drug)
-    dataset_train_drug, dataset_test_drug = split_dataset(drug, 0.9)
-   # dataset_train_drug,dataset_dev_drug =  split_dataset(dataset_train_drug, 0.9)
-    dataset_train_no, dataset_test_no = split_dataset(non_drug, 0.9)
-   # dataset_train_no,dataset_dev_no =  split_dataset(dataset_train_no, 0.9)
-    dataset_train =  pd.concat([dataset_train_drug,dataset_train_no], axis=0)
-    dataset_test=pd.concat([ dataset_test_drug,dataset_test_no], axis=0)
-  #  dataset_dev = dataset_dev_drug+dataset_dev_no
-    return dataset_train, dataset_test
 if __name__ == "__main__":
-    data_drug = pd.read_csv('E:\code\FingerID Reference\drug-likeness/fda_approved.csv')
-    data_nondrug = pd.read_csv('E:\code\FingerID Reference\drug-likeness/non-drug.csv') 
-    data_train,data_test=edit_dataset(data_drug,data_nondrug,'balance')
-    
+
+
+    data_train= pd.read_csv('E:/code/drug/drugnn/data_train.csv')
+    data_test=pd.read_csv('E:/code/drug/drugnn/data_test.csv')
     inchis = list(data_train['SMILES'])
     rts = list(data_train['type'])
     
@@ -151,7 +129,7 @@ if __name__ == "__main__":
     
     features = []
     for i, smi in enumerate(tqdm(smiles)):
-        xi = one_hot_coding(smi, words, max_len=600)
+        xi = one_hot_coding(smi, words, max_len=2000)
         if xi is not None:
             features.append(xi.todense())
     features = np.asarray(features)
@@ -183,23 +161,24 @@ if __name__ == "__main__":
     
     features = []
     for i, smi in enumerate(tqdm(smiles)):
-        xi = one_hot_coding(smi, words, max_len=600)
+        xi = one_hot_coding(smi, words, max_len=2000)
         if xi is not None:
             features.append(xi.todense())
     features = np.asarray(features)
     targets = np.asarray(targets)
     X_test=features
     Y_test=targets
-    n_features=10
+    
     
     #model = RandomForestClassifier(n_estimators=10,max_features='auto', max_depth=None,min_samples_split=2, bootstrap=True)
     #model = MLPClassifier(rangdom_state=1,max_iter=300)
-    model = SVC()
+    model = SVC(C=500, kernel='rbf', gamma='auto',
+                coef0=0.0, shrinking=True,probability=False, tol=0.0001, cache_size=200, class_weight=None, verbose=False, max_iter=- 1, decision_function_shape='ovr', break_ties=False, random_state=None)
    
     # earlyStopping = EarlyStopping(monitor='val_loss', patience=0.05, verbose=0, mode='min')
     #mcp_save = ModelCheckpoint('C:/Users/sunjinyu/Desktop/FingerID Reference/drug-likeness/CNN/single_model.h5', save_best_only=True, monitor='accuracy', mode='auto')
   #  reduce_lr_loss = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=3, verbose=1, epsilon=1e-4, mode='min')
-    from keras import backend as K
+    from tensorflow.keras import backend as K
     X_train = K.cast_to_floatx(X_train).reshape((np.size(X_train,0),np.size(X_train,1)*np.size(X_train,2)))
 
     Y_train = K.cast_to_floatx(Y_train)
@@ -218,7 +197,7 @@ if __name__ == "__main__":
     y=DataFrame(y)
   #  X= pd.concat([x,y], axis=1)
     #X.to_csv('C:/Users/sunjinyu/Desktop/FingerID Reference/drug-likeness/CNN/molecularGNN_smiles-master/0825/single-CNN-seed444.csv')
-    Y_predict = [1 if i >0.4 else 0 for i in Y_predict]
+    Y_predict = [1 if i >0.5 else 0 for i in Y_predict]
 
     cnf_matrix=confusion_matrix(Y_test, Y_predict)
     cnf_matrix

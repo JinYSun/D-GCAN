@@ -173,8 +173,8 @@ if __name__ == "__main__":
     targets = np.asarray(targets)
     X_test=features
     Y_test=targets
-    n_features=10
-    
+   
+  #  kernel = 1.0 * RBF(0.8)
     #model = RandomForestClassifier(n_estimators=10,max_features='auto', max_depth=None,min_samples_split=2, bootstrap=True)
     model = GPC(  random_state=111)
    

@@ -89,7 +89,7 @@ class MolecularGraphNeuralNetwork(nn.Module):
           
             predicted_scores = self.mlp(molecular_vectors)
             
-            loss = F.cross_entropy(predicted_scores, correct_labels)
+            loss = F.cross_entropy(predicted_scores, correct_labels.long())
             predicted_scores = predicted_scores.to('cpu').data.numpy()
             predicted_scores = [s[1] for s in predicted_scores]
       
@@ -100,7 +100,7 @@ class MolecularGraphNeuralNetwork(nn.Module):
             with torch.no_grad():
                 Smiles,molecular_vectors = self.gnn(inputs)
                 predicted_scores = self.mlp(molecular_vectors)
-                loss = F.cross_entropy(predicted_scores, correct_labels)
+                loss = F.cross_entropy(predicted_scores, correct_labels.long())
             predicted_scores = predicted_scores.to('cpu').data.numpy()
             predicted_scores = [s[1] for s in predicted_scores]
             correct_labels = correct_labels.to('cpu').data.numpy()
@@ -205,15 +205,15 @@ if __name__ == "__main__":
        
     radius=1
     dim=65
-    layer_hidden=8
-    layer_output=8
+    layer_hidden=0
+    layer_output=5
 
     batch_train=48
     batch_test=48
-    lr=5e-4
+    lr=3e-4
     lr_decay=0.85
     decay_interval=10#下降间隔
-    iteration=10
+    iteration=140
     N=5000
     (radius, dim, layer_hidden, layer_output,
      batch_train, batch_test, decay_interval,
@@ -232,13 +232,13 @@ if __name__ == "__main__":
 #    print('Preprocessing the', dataset, 'dataset.')
     print('Just a moment......')
     print('-'*100)
-    path='C:/Users/sunjinyu/Desktop/FingerID Reference/'
-    dataname='drug-likeness/'
+    path='E:/code/drug/drugnn/'
+    dataname=''
     
-    dataset_drug = pp.create_dataset('drug.txt',path,dataname)
-    dataset_nondrug = pp.create_dataset('non-drug.txt',path,dataname)
+    dataset_train = pp.create_dataset('data_train.txt',path,dataname)
+    dataset_test = pp.create_dataset('data_test.txt',path,dataname)
     
-    dataset_train, dataset_test = edit_dataset(dataset_drug, dataset_nondrug,'balance')   
+    #dataset_train, dataset_test = edit_dataset(dataset_drug, dataset_nondrug,'balance')   
     #dataset_train, dataset_dev = split_dataset(dataset_train, 0.9)   
     print('The preprocess has finished!')
     print('# of training data samples:', len(dataset_train))

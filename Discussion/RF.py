@@ -137,10 +137,8 @@ def edit_dataset(drug,non_drug,task):
   #  dataset_dev = dataset_dev_drug+dataset_dev_no
     return dataset_train, dataset_test
 if __name__ == "__main__":
-    data_drug = pd.read_csv('E:\code\FingerID Reference\drug-likeness/fda_approved.csv')
-    data_nondrug = pd.read_csv('E:\code\FingerID Reference\drug-likeness/non-drug.csv') 
-    data_train,data_test=edit_dataset(data_drug,data_nondrug,'balance')
-    
+    data_train= pd.read_csv('E:/code/drug/drugnn/data_train.csv')
+    data_test=pd.read_csv('E:/code/drug/drugnn/data_test.csv')
     inchis = list(data_train['SMILES'])
     rts = list(data_train['type'])
     
@@ -199,14 +197,14 @@ if __name__ == "__main__":
     Y_test=targets
     n_features=10
     
-    model = RandomForestClassifier(n_estimators=10,max_features='auto', max_depth=None,min_samples_split=2, bootstrap=True)
+    model = RandomForestClassifier(n_estimators=5,max_features='auto', max_depth=None,min_samples_split=5, bootstrap=True)
     #model = MLPClassifier(rangdom_state=1,max_iter=300)
     #model = SVC()
    
     # earlyStopping = EarlyStopping(monitor='val_loss', patience=0.05, verbose=0, mode='min')
     #mcp_save = ModelCheckpoint('C:/Users/sunjinyu/Desktop/FingerID Reference/drug-likeness/CNN/single_model.h5', save_best_only=True, monitor='accuracy', mode='auto')
   #  reduce_lr_loss = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=3, verbose=1, epsilon=1e-4, mode='min')
-    from keras import backend as K
+    from tensorflow.keras import backend as K
     X_train = K.cast_to_floatx(X_train).reshape((np.size(X_train,0),np.size(X_train,1)*np.size(X_train,2)))
 
     Y_train = K.cast_to_floatx(Y_train)

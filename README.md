@@ -13,7 +13,7 @@ conda install pytorch
 
 conda install -c conda-forge rdkit
 
-Discussion[GitHub]https://github.com/JinyuSun-csu/D-GAT/tree/main/Discussion
+1. Discussion
 
 The Discussion folder contains the scripts for evaluating the classification performance.  We compared RF,GPC, CNN,GNN,SVC.
 

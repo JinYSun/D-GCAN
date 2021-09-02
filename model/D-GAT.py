@@ -77,7 +77,7 @@ class MolecularGraphNeuralNetwork(nn.Module):
         self.W_fingerprint = nn.ModuleList([nn.Linear(dim, dim) for _ in range(layer_hidden)])
 
         self.W_output = nn.ModuleList([nn.Linear(56,56) for _ in range(layer_output)])
-        self.W_property = nn.Linear(56, 4)
+        self.W_property = nn.Linear(56, 2)
        
         self.dropout = dropout
         self.alpha = 0.25

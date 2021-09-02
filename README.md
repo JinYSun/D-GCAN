@@ -20,4 +20,4 @@ The Discussion folder contains the scripts for evaluating the classification per
 
 # Usage
 
-If you want to make the prediction of druglikeness of unknown molecule, please put the molecule's SMILES files in to data directory and run [D-GAT]https://github.com/JinyuSun-csu/D-GAT/blob/main/model/D-GAT.py
+If you want to make the prediction of druglikeness of unknown molecule, please put the molecule's SMILES files in to data directory and run [D-GAT](https://github.com/JinyuSun-csu/D-GAT/blob/main/model/D-GAT.py)

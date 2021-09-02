@@ -8,16 +8,16 @@ The drug-likeness is an essential criterion to distinguish drug-like molecules f
 
 # Depends
 
-Anaconda for python 3.8
+[Anaconda for python 3.8](https://www.python.org/)
 
-conda install pytorch
+[conda install pytorch](https://pytorch.org/)
 
-conda install -c conda-forge rdkit
+[conda install -c conda-forge rdkit](https://rdkit.org/)
 
 # Discussion
 
-The Discussion folder contains the scripts for evaluating the classification performance.  We compared RF,GPC, CNN,GNN,SVC.
+The [Discussion](https://github.com/JinyuSun-csu/D-GAT/tree/main/Discussion) folder contains the scripts for evaluating the classification performance.  We compared sevaral common methods widely used in drug-likeness prediction, such as [GNN](https://github.com/JinyuSun-csu/D-GAT/blob/main/Discussion/GNN.py),[RF](https://github.com/JinyuSun-csu/D-GAT/blob/main/Discussion/GNN.py), [CNN](https://github.com/JinyuSun-csu/D-GAT/blob/main/Discussion/RF.py),[SVC](https://github.com/JinyuSun-csu/D-GAT/blob/main/Discussion/SVC.py),and [GPC](https://github.com/JinyuSun-csu/D-GAT/blob/main/Discussion/GPC.py).
 
 # Usage
 
-If you want to make the prediction of druglikeness of unknown molecule, please put the molecule's SMILES files in to data directory and run [D-GAT](https://github.com/JinyuSun-csu/D-GAT/blob/main/model/D-GAT.py)
+If you want to make the prediction of druglikeness of unknown molecule, please put the molecule's SMILES files in to data directory and run [D-GAT](https://github.com/JinyuSun-csu/D-GAT/blob/main/model/D-GAT.py).

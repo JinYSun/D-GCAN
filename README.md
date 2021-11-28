@@ -1,5 +1,6 @@
 # D-GCAN
 The D-GCAN can predict the druglikeness with the graph neural network-learned representations. It takes molecular graph as the input, and the predicted results as the output.The D-GCAN is a promising tool to predict drug-likeness for selecting lead drug candidates, improving the accuracy of drug development and accelerating the drug discovery process.
+![图片](https://user-images.githubusercontent.com/62410732/143736741-05e00f97-b01c-4130-8faa-562b51c0a4b4.png)
 
 
 # Motivation

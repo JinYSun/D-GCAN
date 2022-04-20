@@ -23,3 +23,5 @@ The [Discussion](https://github.com/JinyuSun-csu/D-GCAN/tree/main/Discussion) fo
 # Usage
 
 If you want to make the prediction of druglikeness of unknown molecule, please put the molecule's SMILES files in to data directory and run [D-GCAN](https://github.com/JinyuSun-csu/D-GCAN/blob/main/model/D-GCAN.py).
+
+The screened GDB-13 database [(S-GDB13)](https://doi.org/10.5281/zenodo.5700830) is a drug-like database and can be used to find new drug candidates

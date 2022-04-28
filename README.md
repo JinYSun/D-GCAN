@@ -1,5 +1,5 @@
 <h3 align="center">
-<p> D-GCAN<br></h3>
+<p>![solgan](https://user-images.githubusercontent.com/62410732/165702936-d56062cc-953f-4440-9ade-08852ddeb78b.png)<br></h3>
 <h4 align="center">
 <h3 align="center">
 <p> A deep learning method to predict drug-likeness based on the graph convolutional attention network (D-GCAN) directly from molecular structures.<br></h3>

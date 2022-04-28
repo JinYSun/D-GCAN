@@ -1,4 +1,4 @@
-<p align="center"><img src="https://user-images.githubusercontent.com/62410732/165703514-8debb002-f36c-4f4f-b185-1c147311af8a.png" alt="logo" width="400px" /></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/62410732/165705895-77c97081-7df2-402d-8199-29d1c33027d2.png" alt="logo" width="400px" /></p>
 <h3 align="center">
 <p> A deep learning method to predict drug-likeness based on the graph convolutional attention network (D-GCAN) directly from molecular structures.<br></h3>
 <h4 align="center">

@@ -1,0 +1,4 @@
+
+O=C1O[C@H](CN2CCOCC2)CN1/N=C/c1ccc([N+](=O)[O-])o1
+NC1=C(Br)C=C(Br)C=C1CN[C@H]1CC[C@H](O)CC1
+NC1=C(Br)C=C(Br)C=C1CN[C@H]1CC[C@H](O)CC1

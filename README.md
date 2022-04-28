@@ -1,6 +1,4 @@
-<h3 align="center">
-<p>D-GCAN<br></h3>
-<h4 align="center">
+<p align="center"><img src="![solgan](https://user-images.githubusercontent.com/62410732/165703514-8debb002-f36c-4f4f-b185-1c147311af8a.png)" alt="logo" width="400px" /></p>
 <h3 align="center">
 <p> A deep learning method to predict drug-likeness based on the graph convolutional attention network (D-GCAN) directly from molecular structures.<br></h3>
 <h4 align="center">

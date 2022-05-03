@@ -27,7 +27,7 @@ The [Discussion](https://github.com/JinyuSun-csu/D-GCAN/tree/main/Discussion) fo
 
 ## Usage
 
-If you want to retrain the model, please put the molecule's SMILES files in to data directory and run [D-GCAN](https://github.com/JinyuSun-csu/D-GCAN/blob/main/model/D-GCAN.py). The test set can be replaced by changing the path. It is as simple as
+If you want to retrain the model, please put the molecule's SMILES files in to data directory and run [D-GCAN](https://github.com/Jinyu-Sun1/D-GCAN/blob/main/main/D_GCAN.py). The test set can be replaced by changing the path. It is as simple as
 
 ```
 import D_GCAN

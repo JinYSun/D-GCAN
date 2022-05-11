@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 pytorch
 rdkit
 numpy
 pandas
 scikit-learn
 torch
+=======
+pytorch
+rdkit
+numpy
+pandas
+scikit-learn
+torch
+>>>>>>> origin/main
 matplotlib

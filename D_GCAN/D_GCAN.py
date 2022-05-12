@@ -118,50 +118,9 @@ def train (test_name,radius = 1,
         tester.save_result(result, file_result)
         tester.save_model(model, file_model)
         print(result)
- 
-    loss = pd.read_table(file_result)
 
-    plt.plot(loss['AUC_train'], color='r', label='AUC of train set')
-    plt.plot(loss['AUC_test'], color='b', label='AUC of test set')
-    plt.ylabel('AUC')
-    plt.xlabel('Epoch')
-    plt.xlim(-1,145)
-    plt.ylim(0,1)
-    plt.legend()
-    plt.savefig(path + 'loss.tif', dpi=300)
-    plt.show()
-    
+    prediction_test, loss_test, test_res = tester.test_classifier(dataset_test)
     res_test = test_res.T
-    res_train = train_res.T
-    cn_matrix = confusion_matrix(res_train[:, 0], res_train[:, 1])
-    cn_matrix
-
-    tn1 = cn_matrix[0, 0]
-    tp1 = cn_matrix[1, 1]
-    fn1 = cn_matrix[1, 0]
-    fp1 = cn_matrix[0, 1]
-
-    bacc_train = ((tp1 / (tp1 + fn1)) + (tn1 / (tn1 + fp1))) / 2  # balance accurance
-    pre_train = tp1 / (tp1 + fp1)  # precision/q+
-    rec_train = tp1 / (tp1 + fn1)  # recall/se
-    sp_train = tn1 / (tn1 + fp1)
-    q__train = tn1 / (tn1 + fn1)
-    f1_train = 2 * pre_train * rec_train / (pre_train + rec_train)  # f1score
-    mcc_train = ((tp1 * tn1) - (fp1 * fn1)) / math.sqrt(
-        (tp1 + fp1) * (tp1 + fn1) * (tn1 + fp1) * (tn1 + fn1))  # Matthews correlation coefficient
-    acc_train = (tp1 + tn1) / (tp1 + fp1 + fn1 + tn1)  # accurancy
-    fpr_train, tpr_train, thresholds_train = roc_curve(res_train[:, 0], res_train[:, 1])
-    print('bacc_train:', bacc_train)
-    print('pre_train:', pre_train)
-    print('rec_train:', rec_train)
-    print('f1_train:', f1_train)
-    print('mcc_train:', mcc_train)
-    print('sp_train:', sp_train)
-    print('q__train:', q__train)
-    print('acc_train:', acc_train)
-
-
-    
 
     cnf_matrix = confusion_matrix(res_test[:, 0], res_test[:, 1])
     cnf_matrix
@@ -190,6 +149,36 @@ def train (test_name,radius = 1,
     print('q_:', q_)
     print('acc:', acc)
     print('auc:', prediction_test)
+       
+    
+    
+    res_train = train_res.T
+    cn_matrix = confusion_matrix(res_train[:, 0], res_train[:, 1])
+    cn_matrix
+
+    tn1 = cn_matrix[0, 0]
+    tp1 = cn_matrix[1, 1]
+    fn1 = cn_matrix[1, 0]
+    fp1 = cn_matrix[0, 1]
+
+    bacc_train = ((tp1 / (tp1 + fn1)) + (tn1 / (tn1 + fp1))) / 2  # balance accurance
+    pre_train = tp1 / (tp1 + fp1)  # precision/q+
+    rec_train = tp1 / (tp1 + fn1)  # recall/se
+    sp_train = tn1 / (tn1 + fp1)
+    q__train = tn1 / (tn1 + fn1)
+    f1_train = 2 * pre_train * rec_train / (pre_train + rec_train)  # f1score
+    mcc_train = ((tp1 * tn1) - (fp1 * fn1)) / math.sqrt(
+        (tp1 + fp1) * (tp1 + fn1) * (tn1 + fp1) * (tn1 + fn1))  # Matthews correlation coefficient
+    acc_train = (tp1 + tn1) / (tp1 + fp1 + fn1 + tn1)  # accurancy
+    fpr_train, tpr_train, thresholds_train = roc_curve(res_train[:, 0], res_train[:, 1])
+    print('bacc_train:', bacc_train)
+    print('pre_train:', pre_train)
+    print('rec_train:', rec_train)
+    print('f1_train:', f1_train)
+    print('mcc_train:', mcc_train)
+    print('sp_train:', sp_train)
+    print('q__train:', q__train)
+    print('acc_train:', acc_train)
     return res_test
 def predict (test_name,property,   radius = 1,
     dim = 52 ,
@@ -226,7 +215,7 @@ def predict (test_name,property,   radius = 1,
     torch.manual_seed(0)
     model = MolecularGraphNeuralNetwork(
         N, dim, layer_hidden, layer_output, dropout).to(device)
-    models=torch.load('model.h5')
+    models=torch.load('model/model.h5')
     model.load_state_dict(models)
     tester = Tester(model,batch_test)
     dataset_dev=pp.create_testdataset(test_name, path, dataname,property)
@@ -268,6 +257,6 @@ def predict (test_name,property,   radius = 1,
         print('acc_dev:',acc_dev)
 
     elif property == False:
-        res_dev =  dev_res.T[:,1]
+        res_dev =  dev_res.T
 
     return res_dev

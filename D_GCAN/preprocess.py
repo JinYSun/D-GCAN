@@ -85,7 +85,7 @@ def extract_fingerprints(radius, atoms, i_jbond_dict,
 
 
 def split_dataset(dataset, ratio):
-    """Shuffle and split a dataset.洗牌和拆分数据集"""
+    """Shuffle and split a dataset."""
     np.random.seed(1234)  # fix the seed for shuffle为洗牌修正种子.
     np.random.shuffle(dataset)
     n = int(ratio * len(dataset))
@@ -104,7 +104,7 @@ def create_testdataset(filename,path,dataname,property):
                   
                 data_original = [data for data in data_original
                                     if '.' not in data.split()[0]]
-                print(data_original)
+                
                 dataset = []
                 for data in data_original:
                 
@@ -140,7 +140,7 @@ def create_testdataset(filename,path,dataname,property):
         with open(dir_dataset + filename, 'r') as f:
                    # smiles_property = f.readline().strip().split()
                     data_original = f.read().strip().split('\n')
-        print(data_original)
+        
         data_original = [data for data in data_original
                             if '.' not in data.split()[0]]
         dataset = []

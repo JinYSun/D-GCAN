@@ -26,10 +26,10 @@ setup(
     version="0.1.1",
     author="Jinyu-Sun",
     license="BSD-3-Clause",
-    author_email="kexinhuang@hsph.harvard.edu",
+    author_email="Jinyusun@csu.edu.cn",
     description="a Deep Learning Based Toolkit for drug-likeness prediction",
     long_description=readme(),
-    long_description_content_type="text/markdown",
+    long_description_content_type="D_GCAN/run",
     url="https://github.com/Jinyu-Sun1/D-GCAN",
     install_requires=requirements,
     classifiers=[

@@ -30,16 +30,17 @@ The [Discussion](https://github.com/JinyuSun-csu/D-GCAN/tree/main/Discussion) fo
 If you want to retrain the model, please put the molecule's SMILES files in to data directory and run [D-GCAN](https://github.com/Jinyu-Sun1/D-GCAN/blob/main/main/D_GCAN.py). The test set can be replaced by changing the path. It is as simple as
 
 ```
-import D_GCAN
-test = D_GCAN.train('../dataset/data_test.txt')
+import train
+
+test = train.train('../dataset/data_test.txt')
 ```
 
 If you want to make the prediction of druglikeness of unknown molecule, we provide the trained model to rapidly generation predictions
 
 ```
-import D_GCAN
+import predict
 
-predict = D_GCAN.predict('../dataset/test.txt',property=False)
+predict = predict.predict('../dataset/test.txt',property=False)
 ```
 
 The D-GCAN-screened GDB-13 database [(S-GDB13)](https://doi.org/10.5281/zenodo.5700830) is a more drug-like database and can be used to find new drug candidates.

@@ -58,6 +58,7 @@ def train (test_name,radius = 1,
     dataname = ''
     
     dataset_train=   pp.create_dataset(dataset_train,path,dataname)
+    dataset_train,dataset_dev = pp.split_dataset(dataset_train,0.9)
     dataset_test= pp.create_dataset(dataset_test,path,dataname)
     np.random.seed(0)
     np.random.shuffle(dataset_train)

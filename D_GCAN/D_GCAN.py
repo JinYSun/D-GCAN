@@ -152,20 +152,15 @@ class MolecularGraphNeuralNetwork(nn.Module):
 
         if train:
             Smiles, molecular_vectors = self.gnn(inputs)
-
             predicted_scores = self.mlp(molecular_vectors)
-
             loss = F.cross_entropy(predicted_scores, correct_labels)
             predicted_scores = predicted_scores.to('cpu').data.numpy()
             predicted_scores = [s[1] for s in predicted_scores]
-
             correct_labels = correct_labels.to('cpu').data.numpy()
-
             return Smiles,loss, predicted_scores, correct_labels
         else:
             with torch.no_grad():
                 Smiles, molecular_vectors = self.gnn(inputs)
-
                 predicted_scores = self.mlp(molecular_vectors)
                 loss = F.cross_entropy(predicted_scores, correct_labels)
             predicted_scores = predicted_scores.to('cpu').data.numpy()
@@ -179,7 +174,6 @@ class Trainer(object):
     def __init__(self, model,lr,batch_train):
         self.model = model
         self.batch_train=batch_train
-
         self.lr=lr
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
 
@@ -207,9 +201,7 @@ class Trainer(object):
         res_train = predictions.T
         cn_matrix = confusion_matrix(res_train[:, 0], res_train[:, 1])
         cn_matrix
-
         tn1 = cn_matrix[0, 0]
-        
         tp1 = cn_matrix[1, 1]
         fn1 = cn_matrix[1, 0]
         fp1 = cn_matrix[0, 1]
@@ -230,18 +222,14 @@ class Tester(object):
             data_batch = list(zip(*dataset[i:i + self.batch_test]))
             (Smiles, loss, predicted_scores, correct_labels) = self.model.forward_classifier(
                 data_batch, train=False)
-
             SMILES += ' '.join(Smiles) + ' '
-
             loss_total += loss.item()
             P.append(predicted_scores)
             C.append(correct_labels)
         SMILES = SMILES.strip().split()
         tru = np.concatenate(C)
-
         pre = np.concatenate(P)
-
-        pred = [1 if i > 0.15 else 0 for i in pre]
+        pred = [1 if i >0.15 else 0 for i in pre]
         #  Tru=map(str,np.concatenate(C))
         #  Pre=map(str,np.concatenate(P))
         #  predictions = '\n'.join(['\t'.join(x) for x in zip(SMILES, Tru, Pre)])
@@ -281,7 +269,7 @@ def split_dataset(dataset, ratio):
 
 
 def dump_dictionary(dictionary, filename):
-    with open(filename, 'wb') as f:
+    with open('../D_GCAN/model'+filename, 'wb') as f:
         pickle.dump(dict(dictionary), f)
 
 

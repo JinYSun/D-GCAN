@@ -87,7 +87,7 @@ def extract_fingerprints(radius, atoms, i_jbond_dict,
 def split_dataset(dataset, ratio):
     """Shuffle and split a dataset."""
     np.random.seed(1234)  # fix the seed for shuffle为洗牌修正种子.
-    np.random.shuffle(dataset)
+#    np.random.shuffle(dataset)
     n = int(ratio * len(dataset))
     return dataset[:n], dataset[n:]
 def create_testdataset(filename,path,dataname,property):
@@ -177,9 +177,14 @@ def create_dataset(filename,path,dataname):
     dir_dataset = path+dataname
     print(filename)
     """Load a dataset."""
-    with open(dir_dataset + filename, 'r') as f:
-        smiles_property = f.readline().strip().split()
-        data_original = f.read().strip().split('\n')
+    try:
+        with open(dir_dataset + filename, 'r') as f:
+            smiles_property = f.readline().strip().split()
+            data_original = f.read().strip().split('\n')
+    except:
+        with open(dir_dataset + filename, 'r') as f:
+            smiles_property = f.readline().strip().split()
+            data_original = f.read().strip().split('\n')
     
         """Exclude the data contains '.' in its smiles.排除含.的数据"""
     data_original = [data for data in data_original

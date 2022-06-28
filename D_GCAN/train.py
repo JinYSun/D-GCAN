@@ -58,8 +58,10 @@ def train (test_name,radius = 1,
     dataname = ''
     
     dataset_train=   pp.create_dataset(dataset_train,path,dataname)
-    dataset_train,dataset_dev = pp.split_dataset(dataset_train,0.9)
-    dataset_test= pp.create_dataset(dataset_test,path,dataname)
+    dataset_train,dataset_test = pp.split_dataset(dataset_train,0.9)
+    print(dataset_train)
+    #dataset_test=   pp.create_dataset(dataset_dev,path,dataname)    
+    #dataset_test= pp.create_dataset(dataset_test,path,dataname)
     np.random.seed(0)
     np.random.shuffle(dataset_train)
     np.random.shuffle(dataset_test)
@@ -119,7 +121,7 @@ def train (test_name,radius = 1,
         tester.save_result(result, file_result)
         tester.save_model(model, file_model)
         print(result)
-
+    model.eval()
     prediction_test, loss_test, test_res = tester.test_classifier(dataset_test)
     res_test = test_res.T
 

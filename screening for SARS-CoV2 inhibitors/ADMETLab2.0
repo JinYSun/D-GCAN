@@ -1,0 +1,77 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "31c52267",
+   "metadata": {},
+   "source": [
+    "# ADMETLab2.0"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "179c79d2",
+   "metadata": {},
+   "source": [
+    "Undesirable pharmacokinetics and toxicity of candidate compounds are the main reasons for the failure of drug development, and it has been widely recognized that absorption, distribution, metabolism, excretion and toxicity (ADMET) of chemicals should be evaluated as early as possible. ADMETlab 2.0 is an enhanced version of the widely used ADMETlab for systematical evaluation of ADMET properties, as well as some physicochemical properties and medicinal chemistry friendliness. With significant updates to functional modules, predictive models, explanations, and the user interface, ADMETlab 2.0 has greater capacity to assist medicinal chemists in accelerating the drug research and development process. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "50a0292a",
+   "metadata": {},
+   "source": [
+    "## Predict"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2885eec0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Predict online:  https://admetmesh.scbdd.com/service/screening/index"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f78512ed",
+   "metadata": {},
+   "source": [
+    "## Acknowledgement"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "91b12808",
+   "metadata": {},
+   "source": [
+    "ADMETlab 2.0: an integrated online platform for accurate and comprehensive predictions of ADMET properties. \n",
+    "\n",
+    "Guoli Xiong, Zhenxing Wu, Jiacai Yi, Li Fu, Zhijiang Yang, Changyu Hsieh, Mingzhu Yin, Xiangxiang Zeng, Chengkun Wu, Xiang Chen, Tingjun Hou*, Dongsheng Cao* Nucleic Acids Res, 2021, 49, W5-W14. "
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

@@ -2,22 +2,9 @@
 """
 Created on Tue Apr 27 22:08:23 2021
 
-@author: BM109X32G-10GPU-02
+@author:Jinyusun
 """
 
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Nov 15 13:46:29 2020
-
-@author: de''
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Nov 15 10:40:57 2020
-
-@author: de''
-"""
 
 from sklearn.datasets import make_blobs
 import json

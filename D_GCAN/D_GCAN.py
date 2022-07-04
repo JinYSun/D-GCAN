@@ -31,13 +31,13 @@ torch.cuda.empty_cache()
 class GraphAttentionLayer(nn.Module):
     def __init__(self, in_features, out_features, dropout, alpha, concat=True):
         super(GraphAttentionLayer, self).__init__()
-        self.dropout = dropout
+        self.dropout = dropout 
         self.concat = concat
-        self.in_features = in_features  
-        self.out_features = out_features 
-        self.alpha = alpha  
+        self.in_features = in_features   #dim of input feature
+        self.out_features = out_features #dim of output feature
+        self.alpha = alpha               # negative_slope leakyrelu
         self.W = nn.Parameter(torch.zeros(size=(in_features, out_features)))  
-        torch.nn.init.xavier_uniform_(self.W , gain=2.0)  
+        torch.nn.init.xavier_uniform_(self.W , gain=2.0)    #Initialization
         #torch.nn.init.kaiming_uniform_(self.W, a=0, mode='fan_in', nonlinearity='leaky_relu')
         self.a = nn.Parameter(torch.zeros(size=(2 * out_features, 1)))  
         #torch.nn.init.kaiming_uniform_(self.a, a=0, mode='fan_in', nonlinearity='leaky_relu')  
@@ -45,12 +45,18 @@ class GraphAttentionLayer(nn.Module):
         self.leakyrelu = nn.LeakyReLU(self.alpha)
 
     def forward(self, input, adj):   
-        h = torch.mm(input, self.W)   
-        N = h.size()[0]     
-        a_input = torch.cat([h.repeat(1, N).view(N * N, -1), h.repeat(N, 1)], dim=1).view(N, -1, 2 * self.out_features)    
+        """
+        input: input_feature [N, in_features] in_features indicates the number of elements of the input feature vector of the node
+        adj: adjacency matrix of the graph dimension [N, N] non-zero is one, data structure basics
+        """
+        h = torch.mm(input, self.W)    # [N, out_features]
+        N = h.size()[0]     #Number of nodes of the graph
+        a_input = torch.cat([h.repeat(1, N).view(N * N, -1), h.repeat(N, 1)], dim=1).view(N, -1, 2 * self.out_features)     # [N, N, 2*out_features]
         e = self.leakyrelu(torch.matmul(a_input, self.a).squeeze(2))
         zero_vec =-9e10 *torch.ones_like(e)
-        attention = torch.where(adj > 0, e, zero_vec)      
+        attention = torch.where(adj > 0, e, zero_vec)    
+        # indicates that if the adjacency matrix element is greater than 0, then the two nodes are connected and the attention factor at that position is retained.
+        # Otherwise it is necessary to mask and set to a very small value, the reason is that this minimum value will be disregarded during softmax.
         attention = F.softmax(attention, dim=1)
         attention = F.dropout(attention, self.dropout, training=self.training)
         h_prime = torch.matmul(attention, h)
@@ -63,6 +69,10 @@ class GraphAttentionLayer(nn.Module):
 class GAT(nn.Module):
     def __init__(self, nfeat, nhid, dropout, alpha, nheads):
         super(GAT, self).__init__()
+        """
+        n_heads indicates that there are several GAL layers, which are finally stitched together, similar to self-attention
+        to extract features from different subspaces.
+        """
         self.dropout = dropout
         self.attentions = [GraphAttentionLayer(nfeat, nhid, dropout=dropout, alpha=alpha, concat=True) for _ in
                            range(nheads)]
@@ -89,8 +99,6 @@ class MolecularGraphNeuralNetwork(nn.Module):
         super(MolecularGraphNeuralNetwork, self).__init__()
         self.layer_hidden=layer_hidden
         self.layer_output=layer_output
-        
-
         self.embed_fingerprint = nn.Embedding(N_fingerprints, dim)
         self.W_fingerprint = nn.ModuleList([nn.Linear(dim, dim) for _ in range(layer_hidden)])
 
@@ -103,6 +111,12 @@ class MolecularGraphNeuralNetwork(nn.Module):
         self.attentions = GAT(dim, dim, dropout, alpha=self.alpha, nheads=self.nheads).to(device)
 
     def pad(self, matrices, pad_value):
+        """Pad the list of matrices
+        with a pad_value (e.g., 0) for batch processing.
+        For example, given a list of matrices [A, B, C],
+        we obtain a new matrix [A00, 0B0, 00C],
+        where 0 is the zero (i.e., pad value) matrix.
+        """
         shapes = [m.shape for m in matrices]
         M, N = sum([s[0] for s in shapes]), sum([s[1] for s in shapes])
         zeros = torch.FloatTensor(np.zeros((M, N))).to(device)
@@ -125,20 +139,24 @@ class MolecularGraphNeuralNetwork(nn.Module):
         return torch.stack(sum_vectors)
 
     def gnn(self, inputs):
+        """Cat or pad each input data for batch processing."""
         Smiles, fingerprints, adjacencies, molecular_sizes = inputs
         fingerprints = torch.cat(fingerprints)
         adj = self.pad(adjacencies, 0)
+        """GNN layer (update the fingerprint vectors)."""
         fingerprint_vectors = self.embed_fingerprint(fingerprints)
 
         for l in range(self.layer_hidden):
             hs = self.update(adj, fingerprint_vectors, l)
             fingerprint_vectors = F.normalize(hs, 2, 1)
+        """Attention layer"""
         molecular_vectors = self.attentions(fingerprint_vectors, adj)
+        """Molecular vector by sum or mean of the fingerprint vectors."""
         molecular_vectors = self.sum(molecular_vectors, molecular_sizes)
         return Smiles, molecular_vectors
 
     def mlp(self, vectors):
-
+        """Regressor based on multilayer perceptron."""
         for l in range(self.layer_output):
         
             vectors = torch.relu(self.W_output[l](vectors))
@@ -153,6 +171,7 @@ class MolecularGraphNeuralNetwork(nn.Module):
         if train:
             Smiles, molecular_vectors = self.gnn(inputs)
             predicted_scores = self.mlp(molecular_vectors)
+            '''loss function'''
             loss = F.cross_entropy(predicted_scores, correct_labels)
             predicted_scores = predicted_scores.to('cpu').data.numpy()
             predicted_scores = [s[1] for s in predicted_scores]
@@ -198,15 +217,6 @@ class Trainer(object):
         SMILES = SMILES.strip().split()
         pred = [1 if i > 0.15 else 0 for i in pre]
         predictions = np.stack((tru, pred, pre))
-        res_train = predictions.T
-        cn_matrix = confusion_matrix(res_train[:, 0], res_train[:, 1])
-        cn_matrix
-        tn1 = cn_matrix[0, 0]
-        tp1 = cn_matrix[1, 1]
-        fn1 = cn_matrix[1, 0]
-        fp1 = cn_matrix[0, 1]
-        bacc=((tp1 / (tp1 + fn1)) + (tn1 / (tn1 + fp1))) / 2
-        acc = (tp1 + tn1) / (tp1 + fp1 + fn1 + tn1)
         return AUC, loss_total, predictions
 
 
@@ -230,21 +240,13 @@ class Tester(object):
         tru = np.concatenate(C)
         pre = np.concatenate(P)
         pred = [1 if i >0.15 else 0 for i in pre]
+        AUC = roc_auc_score(tru, pre)
         #  Tru=map(str,np.concatenate(C))
         #  Pre=map(str,np.concatenate(P))
         #  predictions = '\n'.join(['\t'.join(x) for x in zip(SMILES, Tru, Pre)])
         predictions = np.stack((tru, pred, pre))
-        res_train = predictions.T
-        cn_matrix = confusion_matrix(res_train[:, 0], res_train[:, 1])
-        cn_matrix
 
-        tn1 = cn_matrix[0, 0]
-        tp1 = cn_matrix[1, 1]
-        fn1 = cn_matrix[1, 0]
-        fp1 = cn_matrix[0, 1]
-      
-        acc = (tp1 + tn1) / (tp1 + fp1 + fn1 + tn1)
-        return acc, loss_total, predictions
+        return AUC, loss_total, predictions
 
     def save_result(self, result, filename):
         with open(filename, 'a') as f:
@@ -257,16 +259,6 @@ class Tester(object):
 
     def save_model(self, model, filename):
         torch.save(model.state_dict(), filename)
-
-
-def split_dataset(dataset, ratio):
-    """Shuffle and split a dataset."""
-    np.random.seed(111)  # fix the seed for shuffle.
-    np.random.shuffle(dataset)
-    n = int(ratio * len(dataset))
-    return dataset[:n], dataset[n:]
-
-
 
 def dump_dictionary(dictionary, filename):
     with open('../D_GCAN/model'+filename, 'wb') as f:

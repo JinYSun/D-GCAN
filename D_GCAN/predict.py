@@ -22,19 +22,33 @@ import preprocess as pp
 import pandas as pd
 import matplotlib.pyplot as plt
 from D_GCAN import MolecularGraphNeuralNetwork,Trainer,Tester
+def metrics(cnf_matrix):
+    '''Evaluation Metrics'''
+    tn = cnf_matrix[0, 0]
+    tp = cnf_matrix[1, 1]
+    fn = cnf_matrix[1, 0]
+    fp = cnf_matrix[0, 1]
 
-def predict (test_name,property,   radius = 1,
-    dim = 52 ,
-    layer_hidden = 4,
-    layer_output = 10,
-    dropout = 0.45,
-    batch_train = 8,
-    batch_test = 8,
-    lr =3e-4,
-    lr_decay = 0.85,
-    decay_interval = 25 ,
-    iteration = 140,
-    N = 5000):
+    bacc = ((tp / (tp + fn)) + (tn / (tn + fp))) / 2  # balance accurance
+    pre = tp / (tp + fp)  # precision/q+
+    rec = tp / (tp + fn)  # recall/se
+    sp = tn / (tn + fp)
+    q_ = tn / (tn + fn)
+    f1 = 2 * pre * rec / (pre + rec)  # f1score
+    mcc = ((tp * tn) - (fp * fn)) / math.sqrt(
+        (tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))  # Matthews correlation coefficient
+    acc = (tp + tn) / (tp + fp + fn + tn)  # accurancy
+    
+    print('bacc:', bacc)
+    print('pre:', pre)
+    print('rec:', rec)
+    print('f1:', f1)
+    print('mcc:', mcc)
+    print('sp:', sp)
+    print('q_:', q_)
+    print('acc:', acc)
+def predict (test_name, property, radius, dim, layer_hidden, layer_output, dropout, batch_train,
+    batch_test, lr, lr_decay, decay_interval, iteration, N):
  
     (radius, dim, layer_hidden, layer_output,
      batch_train, batch_test, decay_interval,
@@ -51,57 +65,29 @@ def predict (test_name,property,   radius = 1,
         print('The code uses a CPU...')
 
     lr, lr_decay = map(float, [lr, lr_decay])
-
     path = ''
     dataname = ''
-
     torch.manual_seed(0)
     model = MolecularGraphNeuralNetwork(
         N, dim, layer_hidden, layer_output, dropout).to(device)
-    models=torch.load('model/model.h5')
-    
+    models=torch.load('model/model.h5')   
 #    models.eval()
     model.load_state_dict(models)
     model.eval()
     tester = Tester(model,batch_test)
     dataset_dev=pp.create_testdataset(test_name, path, dataname,property)
     np.random.seed(0)
-    np.random.shuffle(dataset_dev)
-
-   
+    #np.random.shuffle(dataset_dev)  
     prediction_dev, loss_dev, dev_res =  tester.test_classifier(dataset_dev)
-
-
-    if property == True:
-        
+    if property == True:    
         res_dev  = dev_res.T
         cnd_matrix=confusion_matrix(res_dev[:,0], res_dev[:,1])
-        cnd_matrix
-    
+        cnd_matrix  
         tn2 = cnd_matrix[0,0]
         tp2 = cnd_matrix[1,1]
         fn2 = cnd_matrix[1,0]
         fp2 = cnd_matrix[0,1]
-    
-    
-        bacc_dev = ((tp2/(tp2+fn2))+(tn2/(tn2+fp2)))/2#balance accurance
-        pre_dev= tp2/(tp2+fp2)#precision/q+
-        rec_dev = tp2/(tp2+fn2)#recall/se
-        sp_dev=tn2/(tn2+fp2)
-        q__dev=tn2/(tn2+fn2)
-        f1_dev = 2*pre_dev*rec_dev/(pre_dev+rec_dev)#f1score
-        mcc_dev = ((tp2*tn2) - (fp2*fn2))/math.sqrt((tp2+fp2)*(tp2+fn2)*(tn2+fp2)*(tn2+fn2))#Matthews correlation coefficient
-        acc_dev=(tp2+tn2)/(tp2+fp2+fn2+tn2)#accurancy
-        #fpr_dev, tpr_dev, thresholds_dev =roc_curve(res_dev[:,0],res_dev[:,1])
-        print('bacc_dev:',bacc_dev)
-        print('pre_dev:',pre_dev)
-        print('rec_dev:',rec_dev)
-        print('f1_dev:',f1_dev)
-        print('mcc_dev:',mcc_dev)
-        print('sp_dev:',sp_dev)
-        print('q__dev:',q__dev)
-        print('acc_dev:',acc_dev)
-
+        metrics(cnd_matrix)
     elif property == False:
         res_dev =  dev_res.T
 

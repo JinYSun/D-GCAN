@@ -47,7 +47,6 @@ def extract_fingerprints(radius, atoms, i_jbond_dict,
                          fingerprint_dict, edge_dict):
     """Extract the fingerprints from a molecular graph
     based on Weisfeiler-Lehman algorithm.
-
     """
 
     if (len(atoms) == 1) or (radius == 0):
@@ -86,31 +85,23 @@ def extract_fingerprints(radius, atoms, i_jbond_dict,
 
 def split_dataset(dataset, ratio):
     """Shuffle and split a dataset."""
-    np.random.seed(1234)  # fix the seed for shuffle为洗牌修正种子.
+    np.random.seed(1234)  # fix the seed for shuffle
 #    np.random.shuffle(dataset)
     n = int(ratio * len(dataset))
     return dataset[:n], dataset[n:]
 def create_testdataset(filename,path,dataname,property):
     dir_dataset = path+dataname
     print(filename)
-    """Load a dataset."""
-    
-    
+    """Load a dataset."""  
     if property== False:
                 with open(dir_dataset + filename, 'r') as f:
                     #smiles_property = f.readline().strip().split()
                     data_original = f.read().strip().split()
-                
-                  
                 data_original = [data for data in data_original
-                                    if '.' not in data.split()[0]]
-                
+                                    if '.' not in data.split()[0]]              
                 dataset = []
-                for data in data_original:
-                
-                    
-                    smiles = data
-                    
+                for data in data_original:                
+                    smiles = data                
                     try:
                         """Create each data with the above defined functions."""
                         mol = Chem.AddHs(Chem.MolFromSmiles(smiles))
@@ -118,21 +109,14 @@ def create_testdataset(filename,path,dataname,property):
                         molecular_size = len(atoms)
                         i_jbond_dict = create_ijbonddict(mol, bond_dict)
                         fingerprints = extract_fingerprints(radius, atoms, i_jbond_dict,
-                                                            fingerprint_dict, edge_dict)
-                        
-                        adjacency = Chem.GetAdjacencyMatrix(mol)
-                        
+                                                            fingerprint_dict, edge_dict)          
+                        adjacency = Chem.GetAdjacencyMatrix(mol) 
                         """Transform the above each data of numpy
                         to pytorch tensor on a device (i.e., CPU or GPU).
                         """
                         fingerprints = torch.LongTensor(fingerprints).to(device)
-                        
-                                    
-                        adjacency = torch.FloatTensor(adjacency).to(device)
-                       
-                        
-                        proper = torch.LongTensor([int(0)]).to(device)
-                      
+                        adjacency = torch.FloatTensor(adjacency).to(device)                    
+                        proper = torch.LongTensor([int(0)]).to(device)    
                         dataset.append((smiles,fingerprints, adjacency, molecular_size,proper ))
                     except:
                         print(smiles)
@@ -153,24 +137,18 @@ def create_testdataset(filename,path,dataname,property):
                     molecular_size = len(atoms)
                     i_jbond_dict = create_ijbonddict(mol, bond_dict)
                     fingerprints = extract_fingerprints(radius, atoms, i_jbond_dict,
-                                                        fingerprint_dict, edge_dict)
-                    
+                                                        fingerprint_dict, edge_dict)                  
                     adjacency = Chem.GetAdjacencyMatrix(mol)
                     
                     """Transform the above each data of numpy
                     to pytorch tensor on a device (i.e., CPU or GPU).
                     """
-                    fingerprints = torch.LongTensor(fingerprints).to(device)
-                    
-                                
+                    fingerprints = torch.LongTensor(fingerprints).to(device)       
                     adjacency = torch.FloatTensor(adjacency).to(device)
-                   
-                    
                     proper = torch.LongTensor([int(proper)]).to(device)
-                  
                     dataset.append((smiles,fingerprints, adjacency, molecular_size, proper))
                 except:
-                    print(smiles)
+                    print(smiles+'is error')
     return dataset
 
 def create_dataset(filename,path,dataname):
@@ -207,14 +185,9 @@ def create_dataset(filename,path,dataname):
                 """Transform the above each data of numpy
                 to pytorch tensor on a device (i.e., CPU or GPU).
                 """
-                fingerprints = torch.LongTensor(fingerprints).to(device)
-                
-                            
+                fingerprints = torch.LongTensor(fingerprints).to(device)                          
                 adjacency = torch.FloatTensor(adjacency).to(device)
-               
-                
-                property = torch.LongTensor([int(property)]).to(device)
-              
+                property = torch.LongTensor([int(property)]).to(device)            
                 dataset.append((smiles,fingerprints, adjacency, molecular_size, property))
             except:
                 print(smiles)

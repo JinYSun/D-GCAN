@@ -22,12 +22,15 @@ import preprocess as pp
 import pandas as pd
 import matplotlib.pyplot as plt
 from D_GCAN import MolecularGraphNeuralNetwork,Trainer,Tester
-def metrics(cnf_matrix):
+def metrics(res_dev):
     '''Evaluation Metrics'''
-    tn = cnf_matrix[0, 0]
-    tp = cnf_matrix[1, 1]
-    fn = cnf_matrix[1, 0]
-    fp = cnf_matrix[0, 1]
+    cnd_matrix=confusion_matrix(res_dev[:,0], res_dev[:,1])
+    cnd_matrix  
+
+    tn = cnd_matrix[0, 0]
+    tp = cnd_matrix[1, 1]
+    fn = cnd_matrix[1, 0]
+    fp = cnd_matrix[0, 1]
 
     bacc = ((tp / (tp + fn)) + (tn / (tn + fp))) / 2  # balance accurance
     pre = tp / (tp + fp)  # precision/q+
@@ -81,13 +84,8 @@ def predict (test_name, property, radius, dim, layer_hidden, layer_output, dropo
     prediction_dev, loss_dev, dev_res =  tester.test_classifier(dataset_dev)
     if property == True:    
         res_dev  = dev_res.T
-        cnd_matrix=confusion_matrix(res_dev[:,0], res_dev[:,1])
-        cnd_matrix  
-        tn2 = cnd_matrix[0,0]
-        tp2 = cnd_matrix[1,1]
-        fn2 = cnd_matrix[1,0]
-        fp2 = cnd_matrix[0,1]
-        metrics(cnd_matrix)
+
+        metrics(dev_res)
     elif property == False:
         res_dev =  dev_res.T
 

@@ -1,12 +1,15 @@
-#coding=utf-8 
+
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Apr 27 20:09:31 2022
+
+@author:Jinyu-Sun
+"""
+
 from collections import defaultdict
-
 import numpy as np
-
 from rdkit import Chem
-
 import torch
-
 
 device = torch.device('cuda')
  

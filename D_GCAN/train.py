@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 from D_GCAN import MolecularGraphNeuralNetwork,Trainer,Tester
 
 def metrics(cnf_matrix):
+    '''Evaluation Metrics'''
     tn = cnf_matrix[0, 0]
     tp = cnf_matrix[1, 1]
     fn = cnf_matrix[1, 0]
@@ -48,7 +49,6 @@ def metrics(cnf_matrix):
     
 def train (test_name, radius, dim, layer_hidden, layer_output, dropout, batch_train,
     batch_test, lr, lr_decay, decay_interval, iteration, N , dataset_train):
-    '''Evaluation Metrics'''
     
     dataset_test = test_name
     (radius, dim, layer_hidden, layer_output,
@@ -74,16 +74,12 @@ def train (test_name, radius, dim, layer_hidden, layer_output, dropout, batch_tr
     
     dataset_train=   pp.create_dataset(dataset_train,path,dataname)
     #dataset_train,dataset_test = pp.split_dataset(dataset_train,0.9)
-    #print(dataset_train)
     #dataset_test=   pp.create_dataset(dataset_dev,path,dataname)    
     dataset_test= pp.create_dataset(dataset_test,path,dataname)
     np.random.seed(0)
     np.random.shuffle(dataset_train)
- #   np.random.shuffle(dataset_test)
-
     print('The preprocess has finished!')
     print('# of training data samples:', len(dataset_train))
-    # print('# of development data samples:', len(dataset_dev))
     print('# of test data samples:', len(dataset_test))
     print('-' * 100)
 
@@ -96,7 +92,7 @@ def train (test_name, radius, dim, layer_hidden, layer_output, dropout, batch_tr
     print('# of model parameters:',
           sum([np.prod(p.size()) for p in model.parameters()]))
     print('-' * 100)
-    file_result = path + 'AUC' + '.txt'
+    file_result = path + '/results/AUC' + '.txt'
     #    file_result = '../output/result--' + setting + '.txt'
     result = 'Epoch\tTime(sec)\tLoss_train\tLoss_test\tAUC_train\tAUC_test'
     file_test_result = path + 'test_prediction' + '.txt'

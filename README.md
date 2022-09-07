@@ -10,6 +10,8 @@ A deep learning method was developed to predict **d**rug-likeness based on the *
 
 [TOC]
 
+------
+
 ![图片](https://user-images.githubusercontent.com/62410732/143736741-05e00f97-b01c-4130-8faa-562b51c0a4b4.png)
 
 ------
@@ -96,6 +98,4 @@ The D-GCAN-screened GDB-13 database [(S-GDB13)](https://doi.org/10.5281/zenodo.5
 
 ------
 
-Jinyu Sun
-
-E-mail: jinyusun@csu.edu.cn
+Jinyu Sun E-mail: jinyusun@csu.edu.cn

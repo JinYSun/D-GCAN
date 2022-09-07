@@ -172,7 +172,6 @@ def create_dataset(filename,path,dataname):
                         if '.' not in data.split()[0]]
     dataset = []
     for data in data_original:
-
             smiles, property = data.strip().split()
             try:
                 """Create each data with the above defined functions."""
@@ -182,10 +181,9 @@ def create_dataset(filename,path,dataname):
                 i_jbond_dict = create_ijbonddict(mol, bond_dict)
                 fingerprints = extract_fingerprints(radius, atoms, i_jbond_dict,
                                                     fingerprint_dict, edge_dict)
-                
-                adjacency = Chem.GetAdjacencyMatrix(mol)
-                
-                """Transform the above each data of numpy
+                adjacency = Chem.GetAdjacencyMatrix(mol)                
+                """
+                Transform the above each data of numpy
                 to pytorch tensor on a device (i.e., CPU or GPU).
                 """
                 fingerprints = torch.LongTensor(fingerprints).to(device)                          

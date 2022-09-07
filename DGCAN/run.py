@@ -11,14 +11,14 @@ import predict
 import numpy as np
 import rdkit
 from rdkit import Chem
-from rdkit.Chem import QED
+from rdkit.Chem import QED 
 from rdkit import rdBase, Chem
 from rdkit.Chem import PandasTools, QED, Descriptors, rdMolDescriptors
 from rdkit.Chem import Lipinski
 
-tes = train.train('../dataset/bRo5.txt', #test set   
+tes = train.train('../dataset/data_test.txt', #test set   
     radius = 1,        #hops of radius subgraph: 1, 2 
-    dim = 52,          #dimension of graph convolution layers
+    dim = 64,          #dimension of graph convolution layers
     layer_hidden = 4,  #Number of graph convolution layers
     layer_output = 10, #Number of dense layers
     dropout = 0.45,    #drop out rate :0-1
@@ -31,7 +31,9 @@ tes = train.train('../dataset/bRo5.txt', #test set
     N = 5000,           #length of embedding: 2000,3000,5000,7000 
     dataset_train='../dataset/data_train.txt') #training set
 
-test = predict.predict('../dataset/bRo5.txt',
+
+
+test = predict.predict('../dataset/beyondRo5.txt',
     radius = 1,
     property = True,   #True if drug-likeness is known 
     dim = 52 ,

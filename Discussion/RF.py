@@ -12,7 +12,7 @@ import numpy as np
 import math
 from tqdm import tqdm
 from scipy import sparse
-from sklearn.metrics import roc_auc_score,roc_curve
+from sklearn.metrics import roc_auc_score,roc_curve,auc
 from sklearn.metrics import confusion_matrix
 
 import pandas as pd
@@ -125,7 +125,7 @@ def edit_dataset(drug,non_drug,task):
     return dataset_train, dataset_test
 if __name__ == "__main__":
     data_train= pd.read_csv('E:/code/drug/drugnn/data_train.csv')
-    data_test=pd.read_csv('E:/code/drug/drugnn/data_test.csv')
+    data_test=pd.read_csv('E:/code/drug/drugnn/bro5.csv')
     inchis = list(data_train['SMILES'])
     rts = list(data_train['type'])
     
@@ -229,7 +229,7 @@ if __name__ == "__main__":
     mcc = ((tp*tn) - (fp*fn))/math.sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))#Matthews correlation coefficient
     acc=(tp+tn)/(tp+fp+fn+tn)#accurancy
     fpr, tpr, thresholds =roc_curve(Y_test, Y_predict)
-    AUC = roc_auc_score(Y_test, Y_predict)
+    AUC = auc(fpr, tpr)
     print('bacc:',bacc)
     print('pre:',pre)
     print('rec:',rec)

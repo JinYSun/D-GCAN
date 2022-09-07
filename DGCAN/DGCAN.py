@@ -239,14 +239,19 @@ class Tester(object):
         SMILES = SMILES.strip().split()
         tru = np.concatenate(C)
         pre = np.concatenate(P)
-        pred = [1 if i >0.15 else 0 for i in pre]
-        AUC = roc_auc_score(tru, pre)
+        pred = [1 if i ==1 else 0 for i in pre]
+        #AUC = roc_auc_score(tru, pre)
+        cnf_matrix=confusion_matrix(tru,pred)
+        tn = cnf_matrix[0, 0]
+        tp = cnf_matrix[1, 1]
+        fn = cnf_matrix[1, 0]
+        fp = cnf_matrix[0, 1]
+        acc = (tp + tn) / (tp + fp + fn + tn)
         #  Tru=map(str,np.concatenate(C))
         #  Pre=map(str,np.concatenate(P))
         #  predictions = '\n'.join(['\t'.join(x) for x in zip(SMILES, Tru, Pre)])
         predictions = np.stack((tru, pred, pre))
-
-        return AUC, loss_total, predictions
+        return acc, loss_total, predictions
 
     def save_result(self, result, filename):
         with open(filename, 'a') as f:

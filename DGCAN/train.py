@@ -14,12 +14,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import pickle
-from sklearn.metrics import roc_auc_score, roc_curve
+from sklearn.metrics import roc_auc_score, roc_curve,auc
 from sklearn.metrics import confusion_matrix
 import preprocess as pp
 import pandas as pd
 import matplotlib.pyplot as plt
-from D_GCAN import MolecularGraphNeuralNetwork,Trainer,Tester
+from DGCAN import MolecularGraphNeuralNetwork,Trainer,Tester
 
 def metrics(cnf_matrix):
     '''Evaluation Metrics'''
@@ -37,7 +37,7 @@ def metrics(cnf_matrix):
     mcc = ((tp * tn) - (fp * fn)) / math.sqrt(
         (tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))  # Matthews correlation coefficient
     acc = (tp + tn) / (tp + fp + fn + tn)  # accurancy
-    
+
     print('bacc:', bacc)
     print('pre:', pre)
     print('rec:', rec)
@@ -92,12 +92,12 @@ def train (test_name, radius, dim, layer_hidden, layer_output, dropout, batch_tr
     print('# of model parameters:',
           sum([np.prod(p.size()) for p in model.parameters()]))
     print('-' * 100)
-    file_result = path + '/results/AUC' + '.txt'
+    file_result = path + '../DGCAN/results/AUC' + '.txt'
     #    file_result = '../output/result--' + setting + '.txt'
     result = 'Epoch\tTime(sec)\tLoss_train\tLoss_test\tAUC_train\tAUC_test'
     file_test_result = path + 'test_prediction' + '.txt'
     file_predictions = path + 'train_prediction' + '.txt'
-    file_model = '../D_GCAN/model/model' + '.h5'
+    file_model = '../DGCAN/model/model' + '.h5'
     with open(file_result, 'w') as f:
         f.write(result + '\n')
 
@@ -136,5 +136,8 @@ def train (test_name, radius, dim, layer_hidden, layer_output, dropout, batch_tr
     res_test = test_res.T
 
     cnf_matrix = confusion_matrix(res_test[:, 0], res_test[:, 1])
+    fpr, tpr, thresholds = roc_curve(res_test[:, 0], res_test[:, 1])
+    AUC = auc(fpr, tpr)
+    print('auc:',AUC)
     metrics(cnf_matrix)
     return res_test

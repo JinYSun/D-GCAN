@@ -21,12 +21,11 @@ from sklearn.metrics import confusion_matrix
 import preprocess as pp
 import pandas as pd
 import matplotlib.pyplot as plt
-from D_GCAN import MolecularGraphNeuralNetwork,Trainer,Tester
-def metrics(res_dev):
+from DGCAN import MolecularGraphNeuralNetwork,Trainer,Tester
+def metrics(cnd_matrix):
     '''Evaluation Metrics'''
-    cnd_matrix=confusion_matrix(res_dev[:,0], res_dev[:,1])
-    cnd_matrix  
-
+ 
+    
     tn = cnd_matrix[0, 0]
     tp = cnd_matrix[1, 1]
     fn = cnd_matrix[1, 0]
@@ -52,7 +51,6 @@ def metrics(res_dev):
     print('acc:', acc)
 def predict (test_name, property, radius, dim, layer_hidden, layer_output, dropout, batch_train,
     batch_test, lr, lr_decay, decay_interval, iteration, N):
- 
     (radius, dim, layer_hidden, layer_output,
      batch_train, batch_test, decay_interval,
      iteration, dropout) = map(int, [radius, dim, layer_hidden, layer_output,
@@ -84,9 +82,10 @@ def predict (test_name, property, radius, dim, layer_hidden, layer_output, dropo
     prediction_dev, loss_dev, dev_res =  tester.test_classifier(dataset_dev)
     if property == True:    
         res_dev  = dev_res.T
-
-        metrics(dev_res)
+        cnd_matrix=confusion_matrix(res_dev[:,0], res_dev[:,1])
+        cnd_matrix 
+        metrics(cnd_matrix)
     elif property == False:
-        res_dev =  dev_res.T
+        res_dev =  dev_res.T[:,1]
 
     return res_dev

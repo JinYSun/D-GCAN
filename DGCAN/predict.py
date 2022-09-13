@@ -24,7 +24,6 @@ import matplotlib.pyplot as plt
 from DGCAN import MolecularGraphNeuralNetwork,Trainer,Tester
 def metrics(cnd_matrix):
     '''Evaluation Metrics'''
- 
     
     tn = cnd_matrix[0, 0]
     tp = cnd_matrix[1, 1]
@@ -49,8 +48,35 @@ def metrics(cnd_matrix):
     print('sp:', sp)
     print('q_:', q_)
     print('acc:', acc)
+    
+    
 def predict (test_name, property, radius, dim, layer_hidden, layer_output, dropout, batch_train,
     batch_test, lr, lr_decay, decay_interval, iteration, N):
+    '''
+    
+    Parameters
+    ----------
+    data_test = '../dataset/data_test.txt', #test set   
+    radius = 1,        #hops of radius subgraph: 1, 2 
+    dim = 64,          #dimension of graph convolution layers
+    layer_hidden = 4,  #Number of graph convolution layers
+    layer_output = 10, #Number of dense layers
+    dropout = 0.45,    #drop out rate :0-1
+    batch_train = 8,   # batch of training set
+    batch_test = 8,    #batch of test set
+    lr =3e-4,          #learning rate: 1e-5,1e-4,3e-4, 5e-4, 1e-3, 3e-3,5e-3
+    lr_decay = 0.85,   #Learning rate decay:0.5, 0.75, 0.85, 0.9
+    decay_interval = 25,#Number of iterations for learning rate decay:10,25,30,50
+    iteration = 140,    #Number of iterations 
+    N = 5000,           #length of embedding: 2000,3000,5000,7000 
+    dataset_train = '../dataset/data_train.txt') #training set
+
+    Returns
+    -------
+    res_dev 
+    Predicting results
+
+    '''
     (radius, dim, layer_hidden, layer_output,
      batch_train, batch_test, decay_interval,
      iteration, dropout) = map(int, [radius, dim, layer_hidden, layer_output,

@@ -52,7 +52,6 @@ def train (test_name, radius, dim, layer_hidden, layer_output, dropout, batch_tr
     batch_test, lr, lr_decay, decay_interval, iteration, N , dataset_train):
     '''
     
-
     Parameters
     ----------
     data_test='../dataset/data_test.txt', #test set   

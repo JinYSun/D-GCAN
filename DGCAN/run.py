@@ -18,7 +18,7 @@ from rdkit.Chem import Lipinski
 
 tes = train.train('../dataset/data_test.txt',   
     radius = 1,         
-    dim = 64,           
+    dim = 52,           
     layer_hidden = 4,   
     layer_output = 10,  
     dropout = 0.45,    

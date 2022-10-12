@@ -8,8 +8,6 @@
 
 A deep learning method was developed to predict **d**rug-likeness based on the **g**raph **c**onvolutional **a**ttention **n**etwork (D-GCAN) directly from molecular structures. The model combined the advantages of graph convolution and attention mechanism. D-GCAN is a promising tool to predict drug-likeness for selecting potential candidates and accelerating the process of drug discovery by excluding unpromising candidates and avoiding unnecessary biological and clinical testing. 
 
-[TOC]
-
 ------
 
 ![图片](https://user-images.githubusercontent.com/62410732/143736741-05e00f97-b01c-4130-8faa-562b51c0a4b4.png)

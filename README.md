@@ -35,7 +35,7 @@ The drug-likeness has been widely used as a criterion to distinguish drug-like m
 
 
 
-The [Discussion](https://github.com/JinyuSun-csu/D-GCAN/tree/main/Discussion) folder contains the scripts for evaluating the classification performance.  We compared sevaral common methods widely used in drug-likeness prediction, such as [GNN](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/GNN.py),[RF](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/GNN.py), [CNN](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/RF.py),[SVC](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/SVC.py),and [GPC](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/GPC.py).
+The [Discussion](https://github.com/JinYSun/D-GCAN/tree/main/Discussion) folder contains the scripts for evaluating the classification performance.  We compared sevaral common methods widely used in drug-likeness prediction, such as [GNN](https://github.com/JinYSun/D-GCAN/tree/main/Discussion/GNN.py),[RF](https://github.com/JinYSun/D-GCAN/tree/main/Discussion/GNN.py), [CNN](https://github.com/JinYSun/D-GCAN/tree/main/Discussion/RF.py),[SVC](https://github.com/JinYSun/D-GCAN/tree/main/Discussion/SVC.py),and [GPC](https://github.com/JinYSun/D-GCAN/tree/main/Discussion/GPC.py).
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     
@@ -43,7 +43,7 @@ The [Discussion](https://github.com/JinyuSun-csu/D-GCAN/tree/main/Discussion) fo
 
 
 
-If you want to retrain the model, please put the molecule's SMILES files in to data directory and run [D-GCAN](https://github.com/Jinyu-Sun1/D-GCAN/blob/main/main/D_GCAN.py). The test set can be replaced by changing the path. It is as simple as
+If you want to retrain the model, please put the molecule's SMILES files in to data directory and run [D-GCAN](https://github.com/JinYSun/D-GCAN/tree/main/DGCAN/DGCAN.py). The test set can be replaced by changing the path. It is as simple as
 
 ```
 import train
@@ -84,7 +84,7 @@ test = predict.predict('../dataset/bRo5.txt',
 
 ```
 
-The D-GCAN-screened GDB-13 database [(S-GDB13)](https://doi.org/10.5281/zenodo.5700830) is a more drug-like database and can be used to find new drug candidates.
+The D-GCAN-screened GDB-13 database [(S-GDB13)](https://doi.org/10.5281/zenodo.7054367) is a more drug-like database and can be used to find new drug candidates.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Contact

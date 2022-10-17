@@ -96,7 +96,8 @@ Jinyu Sun E-mail: jinyusun@csu.edu.cn
 
 # Cite
 
-@article{10.1093/bioinformatics/btac676,
+
+	@article{10.1093/bioinformatics/btac676,
     author = {Sun, Jinyu and Wen, Ming and Wang, Huabei and Ruan, Yuezhe and Yang, Qiong and Kang, Xiao and Zhang, Hailiang and Zhang, Zhimin and Lu, Hongmei},
     title = "{Prediction of Drug-likeness using Graph Convolutional Attention Network}",
     journal = {Bioinformatics},

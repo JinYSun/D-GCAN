@@ -16,7 +16,6 @@ A deep learning method was developed to predict **d**rug-likeness based on the *
 
 
 The drug-likeness has been widely used as a criterion to distinguish drug-like molecules from non-drugs. Developing reliable computational methods to predict drug-likeness of candidate compounds is crucial to triage unpromising molecules and accelerate the drug discovery process.
-
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     
@@ -29,7 +28,6 @@ The drug-likeness has been widely used as a criterion to distinguish drug-like m
 [conda install pytorch](https://pytorch.org/)
 
 [conda install -c conda-forge rdkit](https://rdkit.org/)
-
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     
@@ -38,7 +36,6 @@ The drug-likeness has been widely used as a criterion to distinguish drug-like m
 
 
 The [Discussion](https://github.com/JinyuSun-csu/D-GCAN/tree/main/Discussion) folder contains the scripts for evaluating the classification performance.  We compared sevaral common methods widely used in drug-likeness prediction, such as [GNN](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/GNN.py),[RF](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/GNN.py), [CNN](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/RF.py),[SVC](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/SVC.py),and [GPC](https://github.com/JinyuSun-csu/D-GCAN/blob/main/Discussion/GPC.py).
-
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     
@@ -88,7 +85,6 @@ test = predict.predict('../dataset/bRo5.txt',
 ```
 
 The D-GCAN-screened GDB-13 database [(S-GDB13)](https://doi.org/10.5281/zenodo.5700830) is a more drug-like database and can be used to find new drug candidates.
-
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Contact
@@ -96,3 +92,14 @@ The D-GCAN-screened GDB-13 database [(S-GDB13)](https://doi.org/10.5281/zenodo.5
 
 
 Jinyu Sun E-mail: jinyusun@csu.edu.cn
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Cite
+
+@article{10.1093/bioinformatics/btac676,
+    author = {Sun, Jinyu and Wen, Ming and Wang, Huabei and Ruan, Yuezhe and Yang, Qiong and Kang, Xiao and Zhang, Hailiang and Zhang, Zhimin and Lu, Hongmei},
+    title = "{Prediction of Drug-likeness using Graph Convolutional Attention Network}",
+    journal = {Bioinformatics},
+    year = {2022},
+    month = {10}
+    }

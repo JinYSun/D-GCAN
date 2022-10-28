@@ -95,9 +95,9 @@ def predict (test_name, property, radius, dim, layer_hidden, layer_output, dropo
     path = ''
     dataname = ''
     torch.manual_seed(0)
-    model = MolecularGraphNeuralNetwork(
-        N, dim, layer_hidden, layer_output, dropout).to(device)
-    model.load_state_dict(torch.load(r'model/model.pth'))
+    # model = MolecularGraphNeuralNetwork(
+    #     N, dim, layer_hidden, layer_output, dropout)
+    model=torch.load(r'model/model.pth').to(device)
     model.eval()
     tester = Tester(model,batch_test)
     dataset_dev=pp.create_testdataset(test_name, path, dataname,property)

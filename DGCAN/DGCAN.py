@@ -263,7 +263,7 @@ class Tester(object):
             f.write(predictions + '\n')
 
     def save_model(self, model, filename):
-        torch.save(model.state_dict(), filename)
+        torch.save(model, filename)
 
 def dump_dictionary(dictionary, filename):
     with open('../DGCAN/model'+filename, 'wb') as f:

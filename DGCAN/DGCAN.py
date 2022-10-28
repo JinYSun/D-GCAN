@@ -239,7 +239,7 @@ class Tester(object):
         SMILES = SMILES.strip().split()
         tru = np.concatenate(C)
         pre = np.concatenate(P)
-        pred = [1 if i ==1 else 0 for i in pre]
+        pred = [1 if i >0.15 else 0 for i in pre]
         #AUC = roc_auc_score(tru, pre)
         cnf_matrix=confusion_matrix(tru,pred)
         tn = cnf_matrix[0, 0]
@@ -266,7 +266,7 @@ class Tester(object):
         torch.save(model.state_dict(), filename)
 
 def dump_dictionary(dictionary, filename):
-    with open('../D_GCAN/model'+filename, 'wb') as f:
+    with open('../DGCAN/model'+filename, 'wb') as f:
         pickle.dump(dict(dictionary), f)
 
 

@@ -22,7 +22,7 @@ tes = train.train('../dataset/data_test.txt',
     layer_hidden = 4,   
     layer_output = 10,  
     dropout = 0.45,    
-    batch_train = 8,    
+    batch_train = 8, 
     batch_test = 8,     
     lr =3e-4,           
     lr_decay = 0.85,    
@@ -32,7 +32,7 @@ tes = train.train('../dataset/data_test.txt',
     dataset_train='../dataset/data_train.txt')  
 
 
-test = predict.predict('../dataset/beyondRo5.txt',
+test = predict.predict('../dataset/bRo5.txt',
     radius = 1,
     property = True,  
     dim = 52 ,

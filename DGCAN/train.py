@@ -122,7 +122,7 @@ def train (test_name, radius, dim, layer_hidden, layer_output, dropout, batch_tr
     result = 'Epoch\tTime(sec)\tLoss_train\tLoss_test\tAUC_train\tAUC_test'
     file_test_result = path + 'test_prediction' + '.txt'
     file_predictions = path + 'train_prediction' + '.txt'
-    file_model = '../DGCAN/model/model' + '.h5'
+    file_model = '../DGCAN/model/model' + '.pth'
     with open(file_result, 'w') as f:
         f.write(result + '\n')
 

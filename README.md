@@ -83,7 +83,13 @@ test = predict.predict('../dataset/bRo5.txt',
 
 ```
 
+or you can run [run.py](https://github.com/JinYSun/D-GCAN/blob/main/DGCAN/run.py) and modify the hyperparameters of the neural network to optimize the model .
+
 The D-GCAN-screened GDB-13 database [(S-GDB13)](https://doi.org/10.5281/zenodo.7054367) is a more drug-like database and can be used to find new drug candidates.
+
+#### -Notice-
+
+As described in paper, the prediction of drug-likeness was deeply influenced by the dataset, especially the negative set. If necessary, retrain the model on your dataset.
 
 
 

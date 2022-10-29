@@ -32,7 +32,7 @@ tes = train.train('../dataset/data_test.txt',
     dataset_train='../dataset/data_train.txt')  
 
 
-test = predict.predict('../dataset/data_test.txt',
+test = predict.predict('../dataset/nonUS.txt',
     radius = 1,
     property = True,  
     dim = 52 ,

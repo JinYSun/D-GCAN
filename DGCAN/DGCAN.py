@@ -36,10 +36,10 @@ class GraphAttentionLayer(nn.Module):
         self.in_features = in_features   #dim of input feature
         self.out_features = out_features #dim of output feature
         self.alpha = alpha               # negative_slope leakyrelu
-        self.W = nn.Parameter(torch.zeros(size=(in_features, out_features)))  
-        torch.nn.init.xavier_uniform_(self.W , gain=2.0)    #Initialization
-        #torch.nn.init.kaiming_uniform_(self.W, a=0, mode='fan_in', nonlinearity='leaky_relu')
-        self.a = nn.Parameter(torch.zeros(size=(2 * out_features, 1)))  
+        self.W = nn.Parameter(torch.zeros(size=(in_features, out_features))) 
+        
+        self.a = nn.Parameter(torch.zeros(size=(2 * out_features, 1))) 
+        torch.nn.init.xavier_uniform_(self.W , gain=2.0)
         #torch.nn.init.kaiming_uniform_(self.a, a=0, mode='fan_in', nonlinearity='leaky_relu')  
         torch.nn.init.xavier_uniform_(self.W , gain=1.9)
         self.leakyrelu = nn.LeakyReLU(self.alpha)
@@ -263,7 +263,7 @@ class Tester(object):
             f.write(predictions + '\n')
 
     def save_model(self, model, filename):
-        torch.save(model, filename)
+        torch.save(model.state_dict(), filename)
 
 def dump_dictionary(dictionary, filename):
     with open('../DGCAN/model'+filename, 'wb') as f:

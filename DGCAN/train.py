@@ -104,8 +104,6 @@ def train (test_name, radius, dim, layer_hidden, layer_output, dropout, batch_tr
     np.random.seed(0)
     np.random.shuffle(dataset_train)
     print('The preprocess has finished!')
-    print('# of training data samples:', len(dataset_train))
-    print('# of test data samples:', len(dataset_test))
     print('-' * 100)
 
     print('Creating a model.')

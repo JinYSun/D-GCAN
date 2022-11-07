@@ -42,7 +42,7 @@ The [Discussion](https://github.com/JinYSun/D-GCAN/tree/main/Discussion) folder 
 
 ## Usage
 
-If you want to retrain the model, please put the molecule's SMILES files in to data directory and run [D-GCAN](https://github.com/JinYSun/D-GCAN/tree/main/DGCAN/DGCAN.py). The test set can be replaced by changing the path. It is as simple as
+If you want to retrain the model, please put the molecule's SMILES files in to data directory and run [D-GCAN](https://github.com/JinYSun/D-GCAN/tree/main/DGCAN/DGCAN.py). The test set can be replaced by changing the path. It is recommended to retrain the model before predicting. The process will take less than 15 minutes. It is as simple as
 
 ```
 import train
@@ -62,7 +62,7 @@ test = train.train('../dataset/bRo5.txt',
     dataset_train='../dataset/data_train.txt') 
 ```
 
-If you want to make the prediction of druglikeness of unknown molecule, we provide the trained model to rapidly generation predictions
+If you want to make the prediction of druglikeness of unknown molecule, it can be made as follow
 
 ```
 import predict
